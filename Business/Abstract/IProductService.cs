@@ -13,6 +13,7 @@ namespace Business.Abstract
     {
         IResult Add(Product product);
         IResult AddAsync(Product product);
+        IResult AddTransactionalTest(Product product);
         IResult Update(Product product);
         IResult UpdateAsync(Product product);
         IResult Delete(Product product);
@@ -23,9 +24,12 @@ namespace Business.Abstract
         IDataResult<Product> GetAsync(Expression<Func<Product, bool>> filter);
         IDataResult<List<Product>> GetAll(Expression<Func<Product, bool>> filter = null);
         IDataResult<List<Product>> GetAllAsync(Expression<Func<Product, bool>> filter = null);
+        IDataResult<List<Product>> GetAllByCategoryId(int entity);
+        IDataResult<List<Product>> GetAllByCategoryIdAsync(int entity);
         IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max);
         IDataResult<List<Product>> GetByUnitPriceAsync(decimal min, decimal max);
         IDataResult<List<ProductDto>> GetProductDetails();
         IDataResult<List<ProductDto>> GetProductDetailsAsync();
+       
     }
 }

@@ -13,10 +13,10 @@ namespace DataAccess.Abstract
         Product GetById(int entity);
         Task<Product> GetByIdAsync(int entity);
         List<ProductDto> GetProductDetails();
-        Task<List<ProductDto>> GetProductDetailsAsync();
+        Task<List<ProductDto>> GetProductDetailsAsync();        
         List<Product> GetAllByProductNameWhereConstain(string entity);
         Task<List<Product>> GetAllByProductNameWhereConstainAsync(string entity);
         List<ProductDto> GetAllByProductNameOrCategoryNameWhereConstain(string constain);
-        Task<List<ProductDto>> GetAllByProductNameOrCategoryNameWhereConstainAsync(string constain);
+        Task<List<ProductDto>> GetAllByProductNameOrCategoryNameWhereConstainAsync(string constain);     
     }
 }

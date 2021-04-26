@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Entities.Concrete;
+using Entities.Concrete;
 using Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +27,9 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Territory> Territories { get; set; }
 
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

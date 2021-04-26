@@ -30,8 +30,14 @@ namespace Business.Constants.Messages
 
         public static string UnitPriceCannotBeNegativeValue = "Birim Fiyatı Negatif Olamaz!";
         public static string UnitPriceCannotBeEmpty = "Birim Fiyatı Boş Olamaz!";
-        public static string UnitPriceInvalidGreaterThanOrEqualTo= "Ürün Kategorisi için Birim Fiyat Değeri Geçersiz!";
+        public static string UnitPriceInvalidGreaterThanOrEqualTo= "Ürün Kategorisi için Birim Fiyat Değeri 10 TL den küçük olamaz!";
 
         public static string MaintenanceTime = "Sistem bakımı yapılmaktadır. Lütfen daha sonra tekrar deneyiniz!";
+
+        public static string ProductNameAlreadyExists = "Bu İsimde Zaten Başka Bir Ürün Bulunmaktadır";
+
+        public static string CategoryLimitValueCannotBeExceeded = "Kategori sınır değeri aşılamaz.";
+
+        public static string CategoryLimitValueExceeded = "Kategori sınır değeri aşıldı.";
     }
 }

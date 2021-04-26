@@ -1,9 +1,13 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Exceptions;
+using Core.Utilities.ForBusiness;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
@@ -12,6 +16,7 @@ using Entities.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -20,19 +25,33 @@ namespace Business.Concrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal;
+        ICategoryService _categoryService;
 
-        public ProductManager(IProductDal productDal)
+        public ProductManager(IProductDal productDal,ICategoryService categoryService)
         {
             _productDal = productDal;
+            _categoryService = categoryService;
         }
 
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
-            HandleException.ClassException(() => _productDal.Add(product));
-            return new SuccessResult(ProductMessages.Added);
+            //HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
+           // ValidationTool.Validate(new ProductValidator(), product);
 
+            IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
+                CheckIfProductNameExists(product.ProductName), CheckIfCategoryLimitExceded());
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            //HandleException.ClassException(() => _productDal.Add(product
+            _productDal.Add(product);
+            return new SuccessResult(ProductMessages.Added);            
         }
 
         [ValidationAspect(typeof(ProductValidator))]
@@ -43,8 +62,20 @@ namespace Business.Concrete
             return new SuccessResult(ProductMessages.Added);
 
         }
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Product product)
+        {
+            Add(product);
+            if (product.UnitPrice < 10)
+            {
+                throw new Exception("");
+            }
+            Add(product);
+            return null;
+        }
 
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
         {
             HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
@@ -65,13 +96,14 @@ namespace Business.Concrete
             HandleException.ClassException(() => _productDal.Delete(product));
             return new Result(true, ProductMessages.Deleted);
         }
-        
+
         public IResult DeleteAsync(Product product)
         {
             HandleException.ClassException(() => _productDal.DeleteAsync(product));
             return new SuccessResult(ProductMessages.Deleted);
         }
 
+        [CacheAspect]
         public IDataResult<Product> GetById(int entity)
         {
             var _getById = _productDal.GetById(entity);
@@ -94,6 +126,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Product>(_getByIdAsync, ProductMessages.ProductListed);
         }
 
+        [CacheAspect]
         public IDataResult<Product> Get(Expression<Func<Product, bool>> filter)
         {
             if (DateTime.Now.Hour == 07)
@@ -126,6 +159,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Product>(_getAsync, ProductMessages.ProductListed);
         }
 
+        [CacheAspect]
         public IDataResult<List<Product>> GetAll(Expression<Func<Product, bool>> filter)
         {
             var _getAll = _productDal.GetAll(filter);
@@ -204,6 +238,59 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductDto>>(_getProductDetailsAsync, ProductMessages.ProductDetailsListed);
         }
 
+        public IDataResult<List<Product>> GetAllByCategoryId(int entity)
+        {
+            var _getAllByCategoryId = _productDal.GetAll((p => p.CategoryId == entity)).ToList();
 
+            if (_getAllByCategoryId == null)
+            {
+                return new ErrorDataResult<List<Product>>(ProductMessages.RecordNotFound);
+            }
+            return new SuccessDataResult<List<Product>>(_getAllByCategoryId, ProductMessages.ProductsListed);
+        }
+
+        public IDataResult<List<Product>> GetAllByCategoryIdAsync(int entity)
+        {
+            var _getAllByCategoryIdAsync = _productDal.GetAllAsync((p => p.CategoryId == entity)).Result.ToList();
+
+            if (_getAllByCategoryIdAsync == null)
+            {
+                return new ErrorDataResult<List<Product>>(ProductMessages.RecordNotFound);
+            }
+            return new SuccessDataResult<List<Product>>(_getAllByCategoryIdAsync, ProductMessages.ProductsListed);
+        }
+
+        private IResult CheckIfProductCountOfCategoryCorrect(int entity)
+        {
+
+            var result = _productDal.GetAll(p => p.CategoryId == entity).Count;
+            if (result >= 15)
+            {
+                return new ErrorResult(ProductMessages.CategoryLimitValueCannotBeExceeded);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfProductNameExists(string productName)
+        {
+            var result = _productDal.GetAll(p => p.ProductName == productName).Any();
+            if (result)
+            {
+                return new ErrorResult(ProductMessages.ProductNameAlreadyExists);
+            }
+            return new SuccessResult();
+            //Select Count(*) from Products p where p.CategoryId=1
+        }
+
+        private IResult CheckIfCategoryLimitExceded()
+        {
+
+            var result = _categoryService.GetAll();
+            if (result.Data.Count > 15)
+            {
+                return new ErrorResult(ProductMessages.CategoryLimitValueExceeded);
+            }
+            return new SuccessResult();
+        }       
     }
 }
