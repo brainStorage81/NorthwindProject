@@ -25,6 +25,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    //Trials for Webapi
     public class ProductManager : IProductService
     {
         IProductDal _productDal;
