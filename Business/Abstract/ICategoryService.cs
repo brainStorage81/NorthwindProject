@@ -12,6 +12,7 @@ namespace Business.Abstract
     {
         IResult Add(Category category);
         IResult AddAsync(Category category);
+        IResult TransactionalOperation(Category category);
 
         IResult Update(Category category);
         IResult UpdateAsync(Category category);

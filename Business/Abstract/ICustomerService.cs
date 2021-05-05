@@ -12,6 +12,7 @@ namespace Business.Abstract
     {
         IResult Add(Customer customer);
         IResult AddAsync(Customer customer);
+        IResult TransactionalOperation(Customer customer);
 
         IResult Update(Customer customer);
         IResult UpdateAsync(Customer customer);

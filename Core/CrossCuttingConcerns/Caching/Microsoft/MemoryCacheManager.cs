@@ -11,40 +11,40 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
 {
     public class MemoryCacheManager : ICacheManager
     {
-        private IMemoryCache _memorycache;
+        private IMemoryCache _memoryCache;
         public MemoryCacheManager()
         {
-            _memorycache = ServiceTool.ServiceProvider.GetService<IMemoryCache>();
+            _memoryCache = ServiceTool.ServiceProvider.GetService<IMemoryCache>();
         }
         public T Get<T>(string key)
         {
-            return _memorycache.Get<T>(key);
+            return _memoryCache.Get<T>(key);
         }
 
         public object Get(string key)
         {
-            return _memorycache.Get(key);
+            return _memoryCache.Get(key);
         }
 
         public void Add(string key, object value, int duration)
         {
-            _memorycache.Set(key, value, TimeSpan.FromMinutes(duration));
+            _memoryCache.Set(key, value, TimeSpan.FromMinutes(duration));
         }
 
         public bool IsAdd(string key)
         {
-            return _memorycache.TryGetValue(key, out _);
+            return _memoryCache.TryGetValue(key, out _);
         }
 
         public void Remove(string key)
         {
-            _memorycache.Remove(key);
+            _memoryCache.Remove(key);
         }
 
         public void RemoveByPattern(string pattern)
         {
             var cacheEntriesCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var cacheEntriesCollection = cacheEntriesCollectionDefinition.GetValue(_memorycache) as dynamic;
+            var cacheEntriesCollection = cacheEntriesCollectionDefinition.GetValue(_memoryCache) as dynamic;
             List<ICacheEntry> cacheCollectionValues = new List<ICacheEntry>();
 
             foreach (var cacheItem in cacheEntriesCollection)
@@ -58,7 +58,7 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
 
             foreach (var key in keysToRemove)
             {
-                _memorycache.Remove(key);
+                _memoryCache.Remove(key);
             }
         }
     }

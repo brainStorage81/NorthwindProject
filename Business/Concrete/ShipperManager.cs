@@ -1,9 +1,14 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
-using Core.Utilities.Exceptions;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -23,50 +28,78 @@ namespace Business.Concrete
             _shipperDal = shipperDal;
         }
 
-        [ValidationAspect(typeof(ShipperValidator))]
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("shipper.add,admin")]
+        [ValidationAspect(typeof(ShipperValidator), Priority = 1)]
+        [CacheRemoveAspect("IShipperService.Get")]
         public IResult Add(Shipper shipper)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ShipperValidator(), shipper));
-            HandleException.ClassException(() => _shipperDal.Add(shipper));
+        {            
+            _shipperDal.Add(shipper);
             return new SuccessResult(ShipperMessages.Added);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("shipper.add,admin")]
         [ValidationAspect(typeof(ShipperValidator))]
+        [CacheRemoveAspect("IShipperService.Get")]
         public IResult AddAsync(Shipper shipper)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ShipperValidator(), shipper));
-            HandleException.ClassException(() => _shipperDal.AddAsync(shipper));
+        {            
+            _shipperDal.AddAsync(shipper);
             return new SuccessResult(ShipperMessages.Added);
         }
 
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Shipper shipper)
+        {
+
+            Add(shipper);
+            if (shipper.ShipCompanyName.StartsWith("SHPC"))
+            {
+                throw new Exception(ShipperMessages.ShipperCompanyNameInvalid);
+            }
+            return new SuccessResult(ShipperMessages.Added);
+        }
+
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("shipper.add,admin")]
         [ValidationAspect(typeof(ShipperValidator))]
+        [CacheRemoveAspect("IShipperService.Get")]
         public IResult Update(Shipper shipper)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ShipperValidator(), shipper));
-            HandleException.ClassException(() => _shipperDal.Update(shipper));
+        {            
+            _shipperDal.Update(shipper);
             return new SuccessResult(ShipperMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("shipper.add,admin")]
         [ValidationAspect(typeof(ShipperValidator))]
+        [CacheRemoveAspect("IShipperService.Get")]
         public IResult UpdateAsync(Shipper shipper)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ShipperValidator(), shipper));
-            HandleException.ClassException(() => _shipperDal.UpdateAsync(shipper));
+        {            
+            _shipperDal.UpdateAsync(shipper);
             return new SuccessResult(ShipperMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("shipper.del,admin")]
+        [CacheRemoveAspect("IShipperService.Get")]
         public IResult Delete(Shipper shipper)
         {
-            HandleException.ClassException(() => _shipperDal.Delete(shipper));
+            _shipperDal.Delete(shipper);
             return new SuccessResult(ShipperMessages.Deleted);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("shipper.del,admin")]
+        [CacheRemoveAspect("IShipperService.Get")]
         public IResult DeleteAsync(Shipper shipper)
         {
-            HandleException.ClassException(() => _shipperDal.DeleteAsync(shipper));
+            _shipperDal.DeleteAsync(shipper);
             return new SuccessResult(ShipperMessages.Deleted);
         }
 
+        [CacheAspect]
+        [SecuredOperation("shipper.list,admin")]
         public IDataResult<Shipper> Get(Expression<Func<Shipper, bool>> filter)
         {
             var _get = _shipperDal.Get(filter);
@@ -78,6 +111,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Shipper>(_get, ShipperMessages.ShipperListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("shipper.list,admin")]
         public IDataResult<Shipper> GetAsync(Expression<Func<Shipper, bool>> filter)
         {
             var _getAsync = _shipperDal.GetAsync(filter).Result;
@@ -89,6 +124,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Shipper>(_getAsync, ShipperMessages.ShipperListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("shipper.list,admin")]
         public IDataResult<List<Shipper>> GetAll(Expression<Func<Shipper, bool>> filter = null)
         {
             var _getAll = _shipperDal.GetAll(filter);
@@ -100,6 +138,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Shipper>>(_getAll, ShipperMessages.ShippersListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("shipper.list,admin")]
         public IDataResult<List<Shipper>> GetAllAsync(Expression<Func<Shipper, bool>> filter = null)
         {
             var _getAllAsync = _shipperDal.GetAllAsync(filter).Result;

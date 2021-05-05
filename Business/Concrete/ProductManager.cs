@@ -3,8 +3,11 @@ using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Exceptions;
 using Core.Utilities.ForBusiness;
@@ -27,20 +30,18 @@ namespace Business.Concrete
         IProductDal _productDal;
         ICategoryService _categoryService;
 
-        public ProductManager(IProductDal productDal,ICategoryService categoryService)
+        public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
             _productDal = productDal;
             _categoryService = categoryService;
         }
 
+        [LogAspect(typeof(FileLogger))]
         [SecuredOperation("product.add,admin")]
-        [ValidationAspect(typeof(ProductValidator))]
+        [ValidationAspect(typeof(ProductValidator),Priority=1)]
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
-            //HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
-           // ValidationTool.Validate(new ProductValidator(), product);
-
             IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
                 CheckIfProductNameExists(product.ProductName), CheckIfCategoryLimitExceded());
 
@@ -49,61 +50,74 @@ namespace Business.Concrete
                 return result;
             }
 
-            //HandleException.ClassException(() => _productDal.Add(product
             _productDal.Add(product);
-            return new SuccessResult(ProductMessages.Added);            
+            return new SuccessResult(ProductMessages.Added);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult AddAsync(Product product)
         {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
-            HandleException.ClassException(() => _productDal.AddAsync(product));
+            _productDal.AddAsync(product);
             return new SuccessResult(ProductMessages.Added);
 
         }
+
         [TransactionScopeAspect]
-        public IResult AddTransactionalTest(Product product)
+        public IResult TransactionalOperation(Product product)
         {
+            
             Add(product);
-            if (product.UnitPrice < 10)
+            if (product.UnitPrice <= 10)
             {
-                throw new Exception("");
+                throw new Exception(ProductMessages.ProductPriceCannotBeLessThan);
             }
-            Add(product);
-            return null;
+            return new SuccessResult(ProductMessages.Added);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
         {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
-            HandleException.ClassException(() => _productDal.Update(product));
+
+            _productDal.Update(product);
             return new Result(true, ProductMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult UpdateAsync(Product product)
         {
-            HandleException.AttributeException(() => ValidationTool.Validate(new ProductValidator(), product));
-            HandleException.ClassException(() => _productDal.UpdateAsync(product));
+            _productDal.UpdateAsync(product);
             return new SuccessResult(ProductMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("product.del,admin")]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Delete(Product product)
         {
-            HandleException.ClassException(() => _productDal.Delete(product));
+            _productDal.Delete(product);
             return new Result(true, ProductMessages.Deleted);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("product.del,admin")]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult DeleteAsync(Product product)
         {
-            HandleException.ClassException(() => _productDal.DeleteAsync(product));
+            _productDal.DeleteAsync(product);
             return new SuccessResult(ProductMessages.Deleted);
         }
 
         [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<Product> GetById(int entity)
         {
             var _getById = _productDal.GetById(entity);
@@ -115,6 +129,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Product>(_getById, ProductMessages.ProductListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<Product> GetByIdAsync(int entity)
         {
             var _getByIdAsync = _productDal.GetByIdAsync(entity).Result;
@@ -127,6 +143,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<Product> Get(Expression<Func<Product, bool>> filter)
         {
             if (DateTime.Now.Hour == 07)
@@ -143,6 +160,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Product>(_get, ProductMessages.ProductListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<Product> GetAsync(Expression<Func<Product, bool>> filter)
         {
             if (DateTime.Now.Hour == 07)
@@ -159,7 +178,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Product>(_getAsync, ProductMessages.ProductListed);
         }
 
-        [CacheAspect]
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<Product>> GetAll(Expression<Func<Product, bool>> filter)
         {
             var _getAll = _productDal.GetAll(filter);
@@ -171,6 +192,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_getAll, ProductMessages.ProductsListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<Product>> GetAllAsync(Expression<Func<Product, bool>> filter = null)
         {
             var _getAllAsync = _productDal.GetAllAsync(filter).Result;
@@ -182,6 +206,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_getAllAsync, ProductMessages.ProductsListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
             var _getByUnitPrice = _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max);
@@ -193,6 +219,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_getByUnitPrice, ProductMessages.ProductListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<Product>> GetByUnitPriceAsync(decimal min, decimal max)
         {
             var _getByUnitPriceAsync = _productDal.GetAllAsync(p => p.UnitPrice >= min && p.UnitPrice <= max).Result;
@@ -204,6 +232,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_getByUnitPriceAsync, ProductMessages.ProductListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<ProductDto>> GetProductDetails()
         {
             if (DateTime.Now.Hour == 07)
@@ -221,6 +252,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductDto>>(_getProductDetails, ProductMessages.ProductDetailsListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<ProductDto>> GetProductDetailsAsync()
         {
             if (DateTime.Now.Hour == 07)
@@ -238,6 +272,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductDto>>(_getProductDetailsAsync, ProductMessages.ProductDetailsListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<Product>> GetAllByCategoryId(int entity)
         {
             var _getAllByCategoryId = _productDal.GetAll((p => p.CategoryId == entity)).ToList();
@@ -249,6 +285,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_getAllByCategoryId, ProductMessages.ProductsListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("product.list,admin")]
         public IDataResult<List<Product>> GetAllByCategoryIdAsync(int entity)
         {
             var _getAllByCategoryIdAsync = _productDal.GetAllAsync((p => p.CategoryId == entity)).Result.ToList();
@@ -260,9 +298,10 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_getAllByCategoryIdAsync, ProductMessages.ProductsListed);
         }
 
+        //internal operations
         private IResult CheckIfProductCountOfCategoryCorrect(int entity)
         {
-
+            //Select Count(*) from Products p where p.CategoryId=1
             var result = _productDal.GetAll(p => p.CategoryId == entity).Count;
             if (result >= 15)
             {
@@ -279,7 +318,7 @@ namespace Business.Concrete
                 return new ErrorResult(ProductMessages.ProductNameAlreadyExists);
             }
             return new SuccessResult();
-            //Select Count(*) from Products p where p.CategoryId=1
+
         }
 
         private IResult CheckIfCategoryLimitExceded()
@@ -291,6 +330,6 @@ namespace Business.Concrete
                 return new ErrorResult(ProductMessages.CategoryLimitValueExceeded);
             }
             return new SuccessResult();
-        }       
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Business.Abstract
     {
         IResult Add(Employee employee);
         IResult AddAsync(Employee employee);
+        IResult TransactionalOperation(Employee employee);
 
         IResult Update(Employee employee);
         IResult UpdateAsync(Employee employee);

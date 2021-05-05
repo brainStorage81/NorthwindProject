@@ -11,6 +11,7 @@ namespace Business.Abstract
     {
         IResult Add(Region region);
         IResult AddAsync(Region region);
+        IResult TransactionalOperation(Region region);
 
         IResult Update(Region region);
         IResult UpdateAsync(Region region);

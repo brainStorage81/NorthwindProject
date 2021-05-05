@@ -1,9 +1,14 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
-using Core.Utilities.Exceptions;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -24,50 +29,79 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
-        [ValidationAspect(typeof(CustomerValidator))]
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("customer.add,admin")]
+        [ValidationAspect(typeof(CustomerValidator), Priority = 1)]
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Add(Customer customer)
         {
-            HandleException.AttributeException(() => ValidationTool.Validate(new CustomerValidator(), customer));
-            HandleException.ClassException(() => _customerDal.Add(customer));
+            
+           _customerDal.Add(customer);
             return new SuccessResult(CustomerMessages.Added);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("customer.add,admin")]
         [ValidationAspect(typeof(CustomerValidator))]
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult AddAsync(Customer customer)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new CustomerValidator(), customer));
-            HandleException.ClassException(() => _customerDal.AddAsync(customer));
+        {            
+            _customerDal.AddAsync(customer);
             return new SuccessResult(CustomerMessages.Added);
         }
 
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Customer customer)
+        {
+            
+            Add(customer);
+            if (customer.CompanyName.StartsWith("C"))
+            {
+                throw new Exception(CustomerMessages.CompanyNameInvalid);
+            }
+            return new SuccessResult(CustomerMessages.Added);
+        }
+
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("customer.add,admin")]
         [ValidationAspect(typeof(CustomerValidator))]
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Update(Customer customer)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new CustomerValidator(), customer));
-            HandleException.ClassException(() => _customerDal.Update(customer));
+        {            
+            _customerDal.Update(customer);
             return new SuccessResult(CustomerMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("customer.add,admin")]
         [ValidationAspect(typeof(CustomerValidator))]
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult UpdateAsync(Customer customer)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new CustomerValidator(), customer));
-            HandleException.ClassException(() => _customerDal.UpdateAsync(customer));
+        {            
+            _customerDal.UpdateAsync(customer);
             return new SuccessResult(CustomerMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("customer.del,admin")]        
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Delete(Customer customer)
         {
-            HandleException.ClassException(() => _customerDal.Delete(customer));
+            _customerDal.Delete(customer);
             return new SuccessResult(CustomerMessages.Deleted);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("customer.del,admin")]        
+        [CacheRemoveAspect("ICustomerService.Get")]
         public IResult DeleteAsync(Customer customer)
         {
-            HandleException.ClassException(() => _customerDal.DeleteAsync(customer));
+            _customerDal.DeleteAsync(customer);
             return new SuccessResult(CustomerMessages.Deleted);
         }
 
+        [CacheAspect]
+        [SecuredOperation("customer.list,admin")]
         public IDataResult<Customer> Get(Expression<Func<Customer, bool>> filter)
         {
             var _get = _customerDal.Get(filter);
@@ -79,6 +113,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(_get, CustomerMessages.CustomerListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("customer.list,admin")]
         public IDataResult<Customer> GetAsync(Expression<Func<Customer, bool>> filter)
         {
             var _getAsync = _customerDal.GetAsync(filter).Result;
@@ -90,6 +126,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(_getAsync, CustomerMessages.CustomerListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("customer.list,admin")]
         public IDataResult<List<Customer>> GetAll(Expression<Func<Customer, bool>> filter = null)
         {
             var _getAll = _customerDal.GetAll(filter);
@@ -101,6 +140,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_getAll, CustomerMessages.CustomersListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("customer.list,admin")]
         public IDataResult<List<Customer>> GetAllAsync(Expression<Func<Customer, bool>> filter = null)
         {
             var _getAllAsync = _customerDal.GetAllAsync(filter).Result;

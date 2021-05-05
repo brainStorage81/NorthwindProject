@@ -12,6 +12,7 @@ namespace Business.Abstract
     {
         IResult Add(Territory territory);
         IResult AddAsync(Territory territory);
+        IResult TransactionalOperation(Territory territory);
 
         IResult Update(Territory territory);
         IResult UpdateAsync(Territory territory);

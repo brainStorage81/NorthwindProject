@@ -11,7 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.InMemory
-{
+
+{   //It was created for the console trials.
     public class InMemoryProductDal : IProductDal
     {
         List<Product> _products;

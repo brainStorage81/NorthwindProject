@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading;
 
 namespace Core.Utilities.Exceptions
-{
+
+{   //It was created for the console trials.
     public static class HandleException
     {
         public static void ClassException(Action action)
@@ -19,9 +20,9 @@ namespace Core.Utilities.Exceptions
             catch (DbUpdateException)
             {
                 isSuccess = false;
-                Console.WriteLine("ClassException Başarılı Olmadı!..");
-                Thread.Sleep(2000);
-                Console.WriteLine("Hata Mesajı: İşlem Başarısız oldu! Lütfen bilgilerinizi kontrol edip tekrar deneyiniz!");
+                //Console.WriteLine("ClassException Başarılı Olmadı!..");
+                //Thread.Sleep(2000);
+                Console.WriteLine("Hata Mesajı: İşlem Başarısız oldu! Benzer kayıt olabilir veya girmiş olduğunuz bilgiler hatalı olabilir. Lütfen bilgilerinizi kontrol edip tekrar deneyiniz!");
                 Thread.Sleep(3000);
                 Environment.Exit(0);
 
@@ -30,8 +31,8 @@ namespace Core.Utilities.Exceptions
             catch (Exception exception)
             {
                 isSuccess = false;
-                Console.WriteLine("ClassException Başarılı Olmadı!..");
-                Thread.Sleep(2000);
+                //Console.WriteLine("ClassException Başarılı Olmadı!..");
+                //Thread.Sleep(2000);
                 Console.WriteLine("Hata Mesajı: " + exception.Message);
                 Thread.Sleep(3000);
                 Environment.Exit(0);
@@ -41,7 +42,7 @@ namespace Core.Utilities.Exceptions
             {
                 if (isSuccess)
                 {
-                    Console.WriteLine("ClassException Başarıyla Tamamlandı!..");
+                    Console.WriteLine("Başarıyla Tamamlandı!..");
                 }
             }
 
@@ -69,7 +70,7 @@ namespace Core.Utilities.Exceptions
             {
                 if (isSuccess)
                 {
-                    Console.WriteLine("AttributeException Başarıyla Tamamlandı!..");
+                    Console.WriteLine("Başarıyla Tamamlandı!..");
                 }
             }
 

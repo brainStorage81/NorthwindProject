@@ -13,11 +13,14 @@ namespace Business.Abstract
     {
         IResult Add(Product product);
         IResult AddAsync(Product product);
-        IResult AddTransactionalTest(Product product);
+        IResult TransactionalOperation(Product product);
+
         IResult Update(Product product);
         IResult UpdateAsync(Product product);
+
         IResult Delete(Product product);
         IResult DeleteAsync(Product product);
+
         IDataResult<Product> GetById(int entity);
         IDataResult<Product> GetByIdAsync(int entity);
         IDataResult<Product> Get(Expression<Func<Product, bool>> filter);

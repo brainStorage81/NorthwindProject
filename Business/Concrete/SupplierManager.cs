@@ -1,9 +1,14 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.CrossCuttingConcerns.Validation.FluentValidation;
-using Core.Utilities.Exceptions;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -23,50 +28,78 @@ namespace Business.Concrete
             _supplierDal = supplierDal;
         }
 
-        [ValidationAspect(typeof(SupplierValidator))]
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("supplier.add,admin")]
+        [ValidationAspect(typeof(SupplierValidator), Priority = 1)]
+        [CacheRemoveAspect("ISupplierService.Get")]
         public IResult Add(Supplier supplier)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new SupplierValidator(), supplier));
-            HandleException.ClassException(() => _supplierDal.Add(supplier));
+        {            
+            _supplierDal.Add(supplier);
             return new SuccessResult(SupplierMessages.Added);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("supplier.add,admin")]
         [ValidationAspect(typeof(SupplierValidator))]
+        [CacheRemoveAspect("ISupplierService.Get")]
         public IResult AddAsync(Supplier supplier)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new SupplierValidator(), supplier));
-            HandleException.ClassException(() => _supplierDal.AddAsync(supplier));
+        {            
+            _supplierDal.AddAsync(supplier);
             return new SuccessResult(SupplierMessages.Added);
         }
 
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Supplier supplier)
+        {
+
+            Add(supplier);
+            if (supplier.SupplierCompanyName.StartsWith("SHPC"))
+            {
+                throw new Exception(SupplierMessages.SupplierCompanyNameInvalid);
+            }
+            return new SuccessResult(SupplierMessages.Added);
+        }
+
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("supplier.add,admin")]
         [ValidationAspect(typeof(SupplierValidator))]
+        [CacheRemoveAspect("ISupplierService.Get")]
         public IResult Update(Supplier supplier)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new SupplierValidator(), supplier));
-            HandleException.ClassException(() => _supplierDal.Update(supplier));
+        {            
+            _supplierDal.Update(supplier);
             return new SuccessResult(SupplierMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("supplier.add,admin")]
         [ValidationAspect(typeof(SupplierValidator))]
+        [CacheRemoveAspect("ISupplierService.Get")]
         public IResult UpdateAsync(Supplier supplier)
-        {
-            HandleException.AttributeException(() => ValidationTool.Validate(new SupplierValidator(), supplier));
-            HandleException.ClassException(() => _supplierDal.UpdateAsync(supplier));
+        {            
+            _supplierDal.UpdateAsync(supplier);
             return new SuccessResult(SupplierMessages.Updated);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("supplier.del,admin")]
+        [CacheRemoveAspect("ISupplierService.Get")]
         public IResult Delete(Supplier supplier)
         {
-            HandleException.ClassException(() => _supplierDal.Delete(supplier));
+            _supplierDal.Delete(supplier);
             return new SuccessResult(SupplierMessages.Deleted);
         }
 
+        [LogAspect(typeof(FileLogger))]
+        [SecuredOperation("supplier.del,admin")]
+        [CacheRemoveAspect("ISupplierService.Get")]
         public IResult DeleteAsync(Supplier supplier)
         {
-            HandleException.ClassException(() => _supplierDal.DeleteAsync(supplier));
+            _supplierDal.DeleteAsync(supplier);
             return new SuccessResult(SupplierMessages.Deleted);
         }
 
+        [CacheAspect]
+        [SecuredOperation("supplier.list,admin")]
         public IDataResult<Supplier> Get(Expression<Func<Supplier, bool>> filter)
         {
             var _get = _supplierDal.Get(filter);
@@ -79,6 +112,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Supplier>(_get, SupplierMessages.SupplierListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("supplier.list,admin")]
         public IDataResult<Supplier> GetAsync(Expression<Func<Supplier, bool>> filter)
         {
             var _getAsync = _supplierDal.GetAsync(filter).Result;
@@ -90,6 +125,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Supplier>(_getAsync, SupplierMessages.SupplierListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("supplier.list,admin")]
         public IDataResult<List<Supplier>> GetAll(Expression<Func<Supplier, bool>> filter = null)
         {
             var _getAll = _supplierDal.GetAll(filter);
@@ -101,6 +139,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Supplier>>(_getAll, SupplierMessages.SuppliersListed);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(duration: 10)]
+        [SecuredOperation("supplier.list,admin")]
         public IDataResult<List<Supplier>> GetAllAsync(Expression<Func<Supplier, bool>> filter = null)
         {
             var _getAllAsync = _supplierDal.GetAllAsync(filter).Result;

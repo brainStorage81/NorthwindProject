@@ -12,6 +12,7 @@ namespace Business.Abstract
     {
         IResult Add(Supplier supplier);
         IResult AddAsync(Supplier supplier);
+        IResult TransactionalOperation(Supplier supplier);
 
         IResult Update(Supplier supplier);
         IResult UpdateAsync(Supplier supplier);

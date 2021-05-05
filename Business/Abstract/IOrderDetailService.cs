@@ -12,6 +12,7 @@ namespace Business.Abstract
     {
         IResult Add(OrderDetail orderDetail);
         IResult AddAsync(OrderDetail orderDetail);
+        IResult TransactionalOperation(OrderDetail orderDetail);
 
         IResult Update(OrderDetail orderDetail);
         IResult UpdateAsync(OrderDetail orderDetail);

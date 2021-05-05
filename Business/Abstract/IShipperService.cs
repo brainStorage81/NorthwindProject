@@ -11,6 +11,7 @@ namespace Business.Abstract
     {
         IResult Add(Shipper shipper);
         IResult AddAsync(Shipper shipper);
+        IResult TransactionalOperation(Shipper shipper);
 
         IResult Update(Shipper shipper);
         IResult UpdateAsync(Shipper shipper);

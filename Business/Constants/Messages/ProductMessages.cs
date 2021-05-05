@@ -38,6 +38,8 @@ namespace Business.Constants.Messages
 
         public static string CategoryLimitValueCannotBeExceeded = "Kategori sınır değeri aşılamaz.";
 
+        public static string ProductPriceCannotBeLessThan = "Ürün Fiyatı 10 liradan az olamaz";
+
         public static string CategoryLimitValueExceeded = "Kategori sınır değeri aşıldı.";
     }
 }
