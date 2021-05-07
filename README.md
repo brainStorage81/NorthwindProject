@@ -1,6 +1,3 @@
-# NorthwindProject
-Console implementation with Northwind Database
-
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
