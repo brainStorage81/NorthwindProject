@@ -2,13 +2,11 @@
   <a href="https://github.com/brainStorage81/NorthwindProject">
     <img src="https://github.com/brainStorage81/NorthwindProject/blob/42139e3fa65706b1a84dee6451a0e85f35be116e/northwind.jpg">
   </a>
-  <h2 align="center">NorthwindProject</h2>
+  <h2 align="center">Northwind E-Commerce Project</h2>
   <p align="center">
     E-commerce project with N-Layer Architecture.    
   </p>
 </p>
-
-<br />
 <br />
     <p align="center"> In this project, we created a website backend for e-commerce using Asp.NET Core and Web API. Customers will be able to register on your site, log in with JWT and take action within their authority.
     </p>
