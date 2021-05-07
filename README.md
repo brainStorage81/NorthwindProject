@@ -7,11 +7,11 @@
     E-commerce project with N-Layer Architecture.    
   </p>
 </p>
-    <p align="center"> In this project, we created a website backend for e-commerce using Asp.NET Core and Web API. Customers will be able to register on your site, log in with JWT and take action within their authority.
+    <p> In this project, we created a website backend for e-commerce using Asp.NET Core and Web API. Customers will be able to register on your site, log in with JWT and take action within their authority.
     </p>
 
 <details open="open">
-  <summary><strong>Techs</strong></summary>
+  <summary><strong>Used Techs</strong></summary>
   <ol>
     <li>
       <a href=" https://github.com/brainStorage81/NorthwindProject">Back-End</a>
