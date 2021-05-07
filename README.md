@@ -114,7 +114,7 @@ Web API Layer that opens the business layer to the internet.
 
 <hr size="3" width="100%" align="left" color="black">
 
-## Contact
+### Contact
 
 Linkedin - [Linkedin](https://www.linkedin.com/in/abdullah-bayram-731171101)
 
@@ -122,7 +122,7 @@ Project Link: [https://github.com/brainStorage81/NorthwindProject](https://githu
 
 <hr size="3" width="100%" align="left" color="black">
 
-## Acknowledgements
+### Acknowledgements
 
 - engindemirog
 
