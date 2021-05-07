@@ -1,3 +1,9 @@
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]]
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
 <p align="center">
   <a href="https://github.com/brainStorage81/NorthwindProject">
     <img src="https://github.com/brainStorage81/NorthwindProject/blob/42139e3fa65706b1a84dee6451a0e85f35be116e/northwind.jpg">
@@ -15,6 +21,7 @@
   <ol>
     <li>
       <a href=" https://github.com/brainStorage81/NorthwindProject">Back-End</a>
+	</br>
       <ul>
         <li>Restful Web Api Vers. .Net Core 5.0.5</li>
       </ul>
@@ -111,3 +118,16 @@ Web API Layer that opens the business layer to the internet.
 
 </details>
 <p></p>
+
+## Contact
+
+Linkedin - [Linkedin](https://www.linkedin.com/in/abdullah-bayram-731171101)
+
+Project Link: [https://github.com/brainStorage81/NorthwindProject](https://github.com/brainStorage81/NorthwindProject)
+
+## Acknowledgements
+
+- engindemirog
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/abdullah-bayram-731171101
