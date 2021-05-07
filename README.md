@@ -5,7 +5,7 @@
     <img src="https://github.com/brainStorage81/NorthwindProject/blob/42139e3fa65706b1a84dee6451a0e85f35be116e/northwind.jpg">
   </a>
   <h2 align="center">Northwind E-Commerce Project</h2>
-  <p align="center">
+  <p>
     E-commerce project with N-Layer Architecture.    
   </p>
 </p>
@@ -112,7 +112,7 @@ In this layer, we determine our main classes that we will use throughout the pro
 
 Web API Layer that opens the business layer to the internet.
 
-<hr size="6" width="50%" align="left" color="green">
+<hr size="6" width="100%" align="left" color="green">
 
 ## Contact
 
