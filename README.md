@@ -1,4 +1,3 @@
-<br />
 <p align="center">
   <a href="https://github.com/brainStorage81/NorthwindProject">
     <img src="https://github.com/brainStorage81/NorthwindProject/blob/42139e3fa65706b1a84dee6451a0e85f35be116e/northwind.jpg">
