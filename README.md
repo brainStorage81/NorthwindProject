@@ -126,7 +126,7 @@ Project Link: [https://github.com/brainStorage81/NorthwindProject](https://githu
 
 - engindemirog
 
-<hr size="3" width="100%" align="left" color="black">
+
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/abdullah-bayram-731171101
