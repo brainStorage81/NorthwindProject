@@ -116,7 +116,7 @@ Web API Layer that opens the business layer to the internet.
 
 ### Contact
 
-Linkedin - [Linkedin Profile](https://www.linkedin.com/in/abdullah-bayram-731171101)
+Linkedin: [Linkedin Profile](https://www.linkedin.com/in/abdullah-bayram-731171101)
 
 Project Link: [Northwind E-Commerce Back-End Project](https://github.com/brainStorage81/NorthwindProject)
 
