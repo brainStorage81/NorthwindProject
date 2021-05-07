@@ -112,13 +112,15 @@ In this layer, we determine our main classes that we will use throughout the pro
 
 Web API Layer that opens the business layer to the internet.
 
-<hr size="6" width="100%" align="left" color="green">
+<hr size="3" width="100%" align="left" color="grey">
 
 ## Contact
 
 Linkedin - [Linkedin](https://www.linkedin.com/in/abdullah-bayram-731171101)
 
 Project Link: [https://github.com/brainStorage81/NorthwindProject](https://github.com/brainStorage81/NorthwindProject)
+
+<hr size="3" width="100%" align="left" color="grey">
 
 ## Acknowledgements
 
