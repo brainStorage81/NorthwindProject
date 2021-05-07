@@ -4,7 +4,7 @@
   <a href="https://github.com/brainStorage81/NorthwindProject">
     <img src="https://github.com/brainStorage81/NorthwindProject/blob/42139e3fa65706b1a84dee6451a0e85f35be116e/northwind.jpg">
   </a>
-  <h2 align="center">Northwind E-Commerce Project</h2>
+  <h2 align="center">Northwind E-Commerce Back-End Project</h2>
   <p>
     E-commerce project with N-Layer Architecture.    
   </p>
@@ -116,9 +116,9 @@ Web API Layer that opens the business layer to the internet.
 
 ### Contact
 
-Linkedin - [Linkedin](https://www.linkedin.com/in/abdullah-bayram-731171101)
+Linkedin - [Linkedin Profile](https://www.linkedin.com/in/abdullah-bayram-731171101)
 
-Project Link: [https://github.com/brainStorage81/NorthwindProject](https://github.com/brainStorage81/NorthwindProject)
+Project Link: [Northwind E-Commerce Back-End Project](https://github.com/brainStorage81/NorthwindProject)
 
 <hr size="3" width="100%" align="left" color="black">
 
