@@ -112,9 +112,6 @@ In this layer, we determine our main classes that we will use throughout the pro
 
 Web API Layer that opens the business layer to the internet.
 
-</details>
-<p></p>
-
 ## Contact
 
 Linkedin - [Linkedin](https://www.linkedin.com/in/abdullah-bayram-731171101)
