@@ -87,7 +87,7 @@
 
 ## Tables
 
-<img src="https://github.com/brainStorage81/NorthwindProject/blob/572453b47ed51b6f99069fdc97afa9fb72123426/Database_Diagram.png">
+<img src="">
   </a>
 
 ## Layers
