@@ -11,8 +11,7 @@
 
 <br />
 <br />
-    <p align="center">
-    In this project, we created a website for e-commerce using Asp.NET Core and Web API. User/Customers will be able to register on our site. 
+    <p align="center"> In this project, we created a website backend for e-commerce using Asp.NET Core and Web API. Customers will be able to register on your site, log in with JWT and take action within their authority.
     </p>
 
 <details open="open">
