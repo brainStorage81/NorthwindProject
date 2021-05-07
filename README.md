@@ -27,10 +27,10 @@
       <ul>
         <li>Interceptors</li>
       </ul>
-	    <ul>
+	<ul>
         <li>Helpers</li>
       </ul>
-	      <ul>
+	<ul>
         <li>IoC</li>
       </ul>
       <ul>
@@ -61,7 +61,7 @@
         <li>Autofac</li>
       </ul>
       <ul>
-        <li>Json Web Token Managment</li>
+        <li>Json Web Token Management</li>
       </ul>
       <ul>
         <li>Async Programing</li>
