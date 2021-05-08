@@ -94,7 +94,7 @@
 
 ### Business
 
-We write our workloads on this layer. This layer is the layer that will process the data that has been pulled into the project by Data Access. We do not use the Data Access layer directly in our applications. By putting the Business layer together, we make Business do it for us. The data from the user first goes to the Business layer, and then is processed and transferred to the Data Access layer. In the business tier, we also specify who will access this data. Let's say we want the accounting staff to be able to add to the program database and pull data. however let's just say we want the Accounting Manager to update and delete data from the database. Here we make such distinctions in the Bussiness layer.
+We write our workloads on this layer. This layer is the layer that will process the data that has been pulled into the project by Data Access. We do not use the Data Access layer directly in our applications. By putting the Business layer together, we make Business do it for us. The data from the user first goes to the Business layer, and then is processed and transferred to the Data Access layer. In addition, data posted by the user passes in this layer with Validation Aspect. In this way, you can prevent cyber attacks and incorrect data entries. In the business tier, we also specify who will access this data. Let's say we want the accounting staff to be able to add to the program database and pull data. however let's just say we want the Accounting Manager to update and delete data from the database. We be able to make such distinctions or controls in the Bussiness layer.
 
 ### Core
 
