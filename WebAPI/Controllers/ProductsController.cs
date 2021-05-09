@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
-
+            Thread.Sleep(1000);
             var result = _productService.GetById(id);
             if (result.Success)
             {

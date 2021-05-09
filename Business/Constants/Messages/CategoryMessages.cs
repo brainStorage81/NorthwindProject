@@ -27,6 +27,7 @@ namespace Business.Constants.Messages
         public static string CategoryNameCannotBeEmpty = "Kategori İsmi Boş Olamaz!";
 
         public static string CategoryDescriptionCannotBeEmpty = "Kategori Açıklaması Boş Olamaz!";
+        public static string CategoryDescriptionInvalid = "Kategori Açıklaması Geçersiz!";
 
         public static string MaintenanceTime = "Sistem bakımı yapılmaktadır. Lütfen daha sonra tekrar deneyiniz!";
     }

@@ -12,6 +12,7 @@ namespace Business.ValidationRules.FluentValidation
         public RegionValidator()
         {
             RuleFor(r => r.RegionDescription).NotEmpty().WithMessage(RegionMessages.RegionDescriptionCannotBeEmpty);
+            RuleFor(r => r.RegionDescription).Matches(@"^[a-zA-Z0-9\-']*$").WithMessage(RegionMessages.RegionDescriptionInvalid);
         }
     }
 }

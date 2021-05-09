@@ -38,23 +38,26 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<ProductManager>().As<IProductService>().SingleInstance();
             builder.RegisterType<EfProductDal>().As<IProductDal>().SingleInstance();
             
-            builder.RegisterType<RegionManager>().As<IRegionService>();
-            builder.RegisterType<EfRegionDal>().As<IRegionDal>();
+            builder.RegisterType<RegionManager>().As<IRegionService>().SingleInstance();
+            builder.RegisterType<EfRegionDal>().As<IRegionDal>().SingleInstance();
 
-            builder.RegisterType<ShipperManager>().As<IShipperService>();
-            builder.RegisterType<EfShipperDal>().As<IShipperDal>();
+            builder.RegisterType<ShipperManager>().As<IShipperService>().SingleInstance();
+            builder.RegisterType<EfShipperDal>().As<IShipperDal>().SingleInstance();
 
-            builder.RegisterType<SupplierManager>().As<ISupplierService>();
-            builder.RegisterType<EfSupplierDal>().As<ISupplierDal>();
+            builder.RegisterType<SupplierManager>().As<ISupplierService>().SingleInstance();
+            builder.RegisterType<EfSupplierDal>().As<ISupplierDal>().SingleInstance();
 
-            builder.RegisterType<TerritoryManager>().As<ITerritoryService>();
-            builder.RegisterType<EfTerritoryDal>().As<ITerritoryDal>();
+            builder.RegisterType<TerritoryManager>().As<ITerritoryService>().SingleInstance();
+            builder.RegisterType<EfTerritoryDal>().As<ITerritoryDal>().SingleInstance();
 
-            builder.RegisterType<UserManager>().As<IUserService>();
-            builder.RegisterType<EfUserDal>().As<IUserDal>();
+            builder.RegisterType<ProductImageManager>().As<IProductImageService>().SingleInstance();
+            builder.RegisterType<EfProductImageDal>().As<IProductImageDal>().SingleInstance();
+
+            builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
+            builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
 
             builder.RegisterType<AuthManager>().As<IAuthService>();
-            builder.RegisterType<JwtHelper>().As<ITokenHelper>();                 
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>();                
            
 
 

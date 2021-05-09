@@ -26,7 +26,7 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Shipper> Shippers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Territory> Territories { get; set; }
-
+        public DbSet<ProductImage> ProductImages { get; set; } 
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }

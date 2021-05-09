@@ -15,6 +15,8 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(t => t.TerritoryDescription).NotEmpty()
                 .WithMessage(TerritoryMessages.TerritoryDescriptionCannotBeEmpty);
             RuleFor(t => t.TerritoryId).Length(5).Must(t=> int.TryParse(t, out i));
+
+            RuleFor(t => t.TerritoryDescription).Matches(@"^[a-zA-Z0-9\-']*$").WithMessage(TerritoryMessages.TerritoryDescriptionInvalid);
         }
         
     }

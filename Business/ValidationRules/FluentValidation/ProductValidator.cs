@@ -14,6 +14,8 @@ namespace Business.ValidationRules.FluentValidation
             
             RuleFor(p => p.ProductName).NotEmpty().WithMessage(ProductMessages.ProductNameCannotBeEmpty);
             RuleFor(p => p.ProductName).MinimumLength(2).WithMessage(ProductMessages.ProductNameInvalid);
+            RuleFor(p => p.ProductName).Matches(@"^[a-zA-Z0-9\-']*$").WithMessage(ProductMessages.ProductNameInvalid);
+
             RuleFor(p => p.QuantityPerUnit).NotEmpty().WithMessage(ProductMessages.QuantityPerUnitCannotBeEmpty);
             RuleFor(p => p.UnitPrice).NotEmpty().WithMessage(ProductMessages.UnitPriceCannotBeEmpty);
             RuleFor(p => p.UnitPrice).GreaterThan(0).WithMessage(ProductMessages.UnitPriceCannotBeNegativeValue);

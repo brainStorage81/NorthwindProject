@@ -24,6 +24,7 @@ namespace Business.Constants.Messages
         public static string TerritoryDetailsListed = "Alan Detayları Listelendi";        
 
         public static string TerritoryDescriptionCannotBeEmpty = "Alan Açıklaması Boş Olamaz!";
+        public static string TerritoryDescriptionInvalid = "Alan Açıklaması Geçersiz!";
 
         public static string MaintenanceTime = "Sistem bakımı yapılmaktadır. Lütfen daha sonra tekrar deneyiniz!";
     }

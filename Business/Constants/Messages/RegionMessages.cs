@@ -24,6 +24,7 @@ namespace Business.Constants.Messages
         public static string RegionDetailsListed = "Bölge Detayları Listelendi";
 
         public static string RegionDescriptionCannotBeEmpty = "Bölge Açıklaması Boş Olamaz!";
+        public static string RegionDescriptionInvalid = "Bölge Açıklaması Geçersiz!";
 
         public static string MaintenanceTime = "Sistem bakımı yapılmaktadır. Lütfen daha sonra tekrar deneyiniz!";
     }

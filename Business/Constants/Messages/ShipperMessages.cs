@@ -24,7 +24,7 @@ namespace Business.Constants.Messages
         public static string ShipperDetailsListed = "Nakliyeci Detayları Listelendi";
 
         public static string ShipCompanyPhoneCannotBeEmpty = "Telefon Numarası Boş Olamaz!";
-        public static string ShipCompanyPhoneLength = "Lütfen, numarayı başında sıfır olmadan 10 karakter olarak yazınız!..";
+        public static string ShipCompanyPhoneInvalid = "Lütfen, numarayı başında sıfır olmadan 10 karakter olarak yazınız!..";
 
         public static string ShipperCompanyNameCannotBeEmpty = "Şirket Ünvanı Boş Olamaz!";
         public static string ShipperCompanyNameInvalid = "Şirket Ünvanı Geçersiz";
