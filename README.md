@@ -9,7 +9,7 @@
     E-commerce project with N-Layer Architecture.    
   </p>
 </p>
-    <p> In this project, we created a website backend for e-commerce using Asp.NET Core and Web API. Customers will be able to register on your site, log in with JWT and take action within their authority.
+    <p> In this project, we created a website backend for e-commerce using Asp.NET Core and RESTful Web API. Customers will be able to register on your site, log in with JWT and take action within their authority.
     </p>
 
 <details open="open">
