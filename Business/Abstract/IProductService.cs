@@ -23,14 +23,19 @@ namespace Business.Abstract
 
         IDataResult<Product> GetById(int entity);
         IDataResult<Product> GetByIdAsync(int entity);
+
         IDataResult<Product> Get(Expression<Func<Product, bool>> filter);
         IDataResult<Product> GetAsync(Expression<Func<Product, bool>> filter);
+
         IDataResult<List<Product>> GetAll(Expression<Func<Product, bool>> filter = null);
         IDataResult<List<Product>> GetAllAsync(Expression<Func<Product, bool>> filter = null);
+
         IDataResult<List<Product>> GetAllByCategoryId(int entity);
         IDataResult<List<Product>> GetAllByCategoryIdAsync(int entity);
+
         IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max);
         IDataResult<List<Product>> GetByUnitPriceAsync(decimal min, decimal max);
+
         IDataResult<List<ProductDto>> GetProductDetails();
         IDataResult<List<ProductDto>> GetProductDetailsAsync();
        

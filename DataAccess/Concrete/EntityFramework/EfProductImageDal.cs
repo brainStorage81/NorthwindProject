@@ -22,7 +22,7 @@ namespace DataAccess.Concrete.EntityFramework
 
         public Task<ProductImage> GetByIdAsync(int entity)
         {
-            using (NorthwindContext context = new NorthwindContext())
+            NorthwindContext context = new NorthwindContext();
             {
                 return context.Set<ProductImage>().SingleOrDefaultAsync(p => p.Id == entity);
             }

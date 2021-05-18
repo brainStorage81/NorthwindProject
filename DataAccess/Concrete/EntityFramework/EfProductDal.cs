@@ -87,7 +87,7 @@ namespace DataAccess.Concrete.EntityFramework
 
         public Task<Product> GetByIdAsync(int entity)
         {
-            using (NorthwindContext context = new NorthwindContext())
+            NorthwindContext context = new NorthwindContext();
             {
                 return context.Set<Product>().SingleOrDefaultAsync(p => p.ProductId == entity);
             }
